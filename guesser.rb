@@ -3,6 +3,7 @@ class NumberGuesser
     @low = 1
     @high = 100
     @guess = nil
+    @previous_guesses = []
   end
 
   def think
@@ -31,6 +32,7 @@ class NumberGuesser
   def make_guess
     @guess = (@low + @high) / 2
     puts "Is your number #{@guess}? (Respond with too low, too high, or correct)"
+    @previous_guesses << @guess
   end
 
   def handle_too_low
@@ -39,6 +41,7 @@ class NumberGuesser
       reset_game
     else
       @low = @guess + 1
+      detect_lies
     end
   end
 
@@ -48,6 +51,14 @@ class NumberGuesser
       reset_game
     else
       @high = @guess - 1
+      detect_lies
+    end
+  end
+
+  def detect_lies
+    if @low > @high
+      puts "You're lying! Let's start over!"
+      reset_game
     end
   end
 
@@ -55,6 +66,7 @@ class NumberGuesser
     @low = 1
     @high = 100
     @guess = nil
+    @previous_guesses.clear
     puts "Think of a number between 1 and 100."
   end
 end
