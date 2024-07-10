@@ -22,7 +22,7 @@ class NumberGuesser
         break unless play_again == "yes"
         reset_game
       else
-        puts "Please respond with too low, too high, or correct."
+        puts "Please respond with 'too low', 'too high', or 'correct'."
       end
     end
   end
@@ -31,14 +31,13 @@ class NumberGuesser
 
   def make_guess
     @guess = (@low + @high) / 2
-    puts "Is your number #{@guess}? (Respond with too low, too high, or correct)"
+    puts "Is your number #{@guess}? (Respond with 'too low', 'too high', or 'correct')"
     @previous_guesses << @guess
   end
 
   def handle_too_low
     if @guess >= @high
-      puts "You're lying! Let's start over!"
-      reset_game
+      call_out_lie
     else
       @low = @guess + 1
       detect_lies
@@ -47,8 +46,7 @@ class NumberGuesser
 
   def handle_too_high
     if @guess <= @low
-      puts "You're lying! Let's start over!"
-      reset_game
+      call_out_lie
     else
       @high = @guess - 1
       detect_lies
@@ -57,9 +55,15 @@ class NumberGuesser
 
   def detect_lies
     if @low > @high
-      puts "You're lying! Let's start over!"
-      reset_game
+      call_out_lie
     end
+  end
+
+  def call_out_lie
+    puts "You're lying! Do you want to play again? Enter yes or no:"
+    play_again = gets.chomp.downcase
+    reset_game if play_again == "yes"
+    exit if play_again != "yes"
   end
 
   def reset_game
@@ -73,3 +77,4 @@ end
 
 guesser = NumberGuesser.new
 guesser.think
+
